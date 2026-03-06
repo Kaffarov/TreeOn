@@ -6,35 +6,15 @@ import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTree, FaSearch, FaTimes, FaInfoCircle } from 'react-icons/fa';
 
-// Custom marker icon (teardrop shape with configurable color)
-const getMarkerIcon = (isSelected) => {
-  const color = isSelected ? '#4CAF50' : '#2196F3'; // green when selected, blue otherwise
-  return L.divIcon({
-    className: 'custom-tree-marker',
-    html: `<div style="
-      width: 30px;
-      height: 30px;
-      background-color: ${color};
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      border: 2px solid white;
-    "><div style="
-      width: 12px;
-      height: 12px;
-      background-color: white;
-      border-radius: 50%;
-      position: relative;
-      top: 8px;
-      left: 8px;
-    "></div></div>`,
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],      // tip at bottom
-    popupAnchor: [0, -30],     // popup above the icon
-  });
-};
+// Fix for default marker icons
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
-// Component to fit map bounds to markers initially
+// Component to fit map bounds to markers
 function FitBounds({ markers }) {
   const map = useMap();
   useEffect(() => {
@@ -48,27 +28,18 @@ function FitBounds({ markers }) {
   return null;
 }
 
-// Component to fly to selected tree
-function FlyToSelected({ selectedTree }) {
-  const map = useMap();
-  useEffect(() => {
-    if (selectedTree) {
-      map.flyTo([selectedTree.lat, selectedTree.lng], 8, { duration: 1.5 });
-    }
-  }, [selectedTree, map]);
-  return null;
-}
-
 const InteractiveMap = () => {
   const [trees] = useState([
     { id: 'T12345', species: 'Mango', donor: 'John Smith', lat: -1.2921, lng: 36.8219, location: 'Nakuru, Kenya', plantedDate: '2026-02-15', isAnonymous: false },
     { id: 'T12348', species: 'Plum', donor: 'Michael Brown', lat: 7.5399, lng: 39.2399, location: 'Oromia, Ethiopia', plantedDate: '2026-01-28', isAnonymous: false },
     { id: 'T12353', species: 'Avocado', donor: 'John Kamau', lat: -1.3, lng: 36.7, location: 'Nairobi, Kenya', plantedDate: '2026-02-18', isAnonymous: false },
+
     { id: 'T12355', species: 'Mango', donor: 'Anonymous', lat: 9.8965, lng: 8.8583, location: 'Jos, Nigeria', plantedDate: '2026-03-01', isAnonymous: true },
     { id: 'T12356', species: 'Avocado', donor: 'Amina Bello', lat: 10.5105, lng: 7.4165, location: 'Kaduna, Nigeria', plantedDate: '2026-03-01', isAnonymous: false },
     { id: 'T12357', species: 'Guava', donor: 'Anonymous', lat: 4.9517, lng: 8.3220, location: 'Calabar, Nigeria', plantedDate: '2026-03-02', isAnonymous: true },
     { id: 'T12358', species: 'Plum', donor: 'Samuel Musa', lat: 8.8463, lng: 7.8736, location: 'Keffi, Nigeria', plantedDate: '2026-03-02', isAnonymous: false },
     { id: 'T12359', species: 'Grape', donor: 'Anonymous', lat: 10.3158, lng: 9.8442, location: 'Bauchi, Nigeria', plantedDate: '2026-03-02', isAnonymous: true },
+
     { id: 'T12360', species: 'Baobab', donor: 'Jean Pierre', lat: 4.2330, lng: 9.2330, location: 'Ekona, Cameroon', plantedDate: '2026-03-03', isAnonymous: false },
     { id: 'T12361', species: 'Papaya', donor: 'Anonymous', lat: 4.2890, lng: 9.4100, location: 'Muyuka, Cameroon', plantedDate: '2026-03-03', isAnonymous: true },
     { id: 'T12362', species: 'Mango', donor: 'Clara Ndzi', lat: 4.1550, lng: 9.2420, location: 'Buea, Cameroon', plantedDate: '2026-03-03', isAnonymous: false },
@@ -80,8 +51,10 @@ const InteractiveMap = () => {
     { id: 'T12368', species: 'Mango', donor: 'Hassan Bello', lat: 12.3780, lng: 14.2420, location: 'Fotokol, Cameroon', plantedDate: '2026-03-04', isAnonymous: false },
     { id: 'T12369', species: 'Avocado', donor: 'Anonymous', lat: 3.8000, lng: 10.1330, location: 'Édéa, Cameroon', plantedDate: '2026-03-05', isAnonymous: true },
     { id: 'T12370', species: 'Guava', donor: 'Marie Ekane', lat: 2.9370, lng: 9.9070, location: 'Kribi, Cameroon', plantedDate: '2026-03-05', isAnonymous: false },
+
     { id: 'T12371', species: 'Baobab', donor: 'Anonymous', lat: 12.7670, lng: -1.8000, location: 'Sourgoubila, Burkina Faso', plantedDate: '2026-03-05', isAnonymous: true },
     { id: 'T12372', species: 'Mango', donor: 'Issa Ouedraogo', lat: 11.1000, lng: -1.0000, location: 'Tiébélé, Burkina Faso', plantedDate: '2026-03-05', isAnonymous: false },
+
     { id: 'T12373', species: 'Papaya', donor: 'Anonymous', lat: 8.9000, lng: 11.3600, location: 'Jalingo, Nigeria', plantedDate: '2026-03-05', isAnonymous: true },
   ]);
 
@@ -95,18 +68,15 @@ const InteractiveMap = () => {
     (tree.donor.toLowerCase().includes(searchTerm.toLowerCase()) && !tree.isAnonymous)
   );
 
-  const handleSidebarItemClick = (tree) => {
-    setSelectedTree(tree);
-  };
-
   const handleMarkerClick = (tree) => {
     setSelectedTree(tree);
   };
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
-      {/* Header with only the button */}
-      <div className="bg-white shadow-sm p-4 flex justify-end items-center">
+      {/* Header */}
+       <div className="bg-white shadow-sm p-4 flex justify-between items-center">
+         <h1 className="text-2xl font-bold text-gray-800">.</h1> 
         <button
           onClick={() => setShowSidebar(!showSidebar)}
           className="bg-primary-600 text-white px-3 py-2 rounded-lg hover:bg-primary-700 transition"
@@ -131,7 +101,6 @@ const InteractiveMap = () => {
             <Marker
               key={tree.id}
               position={[tree.lat, tree.lng]}
-              icon={getMarkerIcon(tree.id === selectedTree?.id)}
               eventHandlers={{ click: () => handleMarkerClick(tree) }}
             >
               <Popup>
@@ -146,7 +115,6 @@ const InteractiveMap = () => {
             </Marker>
           ))}
           <FitBounds markers={filteredTrees} />
-          <FlyToSelected selectedTree={selectedTree} />
         </MapContainer>
 
         {/* Floating Sidebar */}
@@ -191,7 +159,10 @@ const InteractiveMap = () => {
                       className={`p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition ${
                         selectedTree?.id === tree.id ? 'border-primary-500 bg-primary-50' : ''
                       }`}
-                      onClick={() => handleSidebarItemClick(tree)}
+                      onClick={() => {
+                        setSelectedTree(tree);
+                        // Optionally, you could pan the map to this tree
+                      }}
                     >
                       <div className="flex items-start">
                         <FaTree className="text-primary-500 mt-1 mr-2 flex-shrink-0" />

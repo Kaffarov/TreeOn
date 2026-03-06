@@ -15,6 +15,8 @@ import {
   FaUserGraduate
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import Navbar from '../../components/layout/Navbar';
+import Footer from '../../components/layout/Footer';
 
 const FarmerDashboard = () => {
   // Mock farmer data (in real app, fetched from API)
@@ -62,6 +64,7 @@ const FarmerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <Navbar />
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -239,6 +242,7 @@ const FarmerDashboard = () => {
           </div>
         </motion.div>
       </div>
+      <Footer />
     </div>
   );
 };

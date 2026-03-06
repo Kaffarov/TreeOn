@@ -1,10 +1,15 @@
 // src/pages/public/Login.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaTree } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FaTree, FaEnvelope, FaLock } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -53,11 +58,19 @@ const Login = () => {
     setIsLoading(true);
     try {
       // Simulate API call
-      console.log('Logging in with:', formData);
-      // Replace with actual API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
+      
+      // Mock login - in real app, call your auth service
+      const userData = {
+        id: 'U001',
+        email: formData.email,
+        name: 'John Doe',
+        role: 'donor',
+      };
+      login(userData);
+      
       toast.success('Login successful! Redirecting...');
-      // Redirect logic would go here (e.g., navigate('/dashboard'))
+      navigate('/dashboard');
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
     } finally {
@@ -67,7 +80,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-leaf-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-8"
+      >
         {/* Header */}
         <div className="text-center">
           <div className="flex justify-center">
@@ -93,19 +111,24 @@ const Login = () => {
               >
                 Email address
               </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className={`appearance-none relative block w-full px-3 py-3 border ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition`}
-                placeholder="you@example.com"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaEnvelope className="text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`appearance-none relative block w-full pl-10 pr-3 py-3 border ${
+                    errors.email ? 'border-red-300' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition`}
+                  placeholder="you@example.com"
+                />
+              </div>
               {errors.email && (
                 <p className="mt-1 text-sm text-red-600">{errors.email}</p>
               )}
@@ -119,19 +142,24 @@ const Login = () => {
               >
                 Password
               </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-                className={`appearance-none relative block w-full px-3 py-3 border ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition`}
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaLock className="text-gray-400" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`appearance-none relative block w-full pl-10 pr-3 py-3 border ${
+                    errors.password ? 'border-red-300' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition`}
+                  placeholder="••••••••"
+                />
+              </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">{errors.password}</p>
               )}
@@ -193,7 +221,7 @@ const Login = () => {
             </Link>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

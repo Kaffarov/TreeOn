@@ -6,33 +6,13 @@ import 'leaflet/dist/leaflet.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTree, FaSearch, FaTimes, FaInfoCircle } from 'react-icons/fa';
 
-// Custom marker icon (teardrop shape with configurable color)
-const getMarkerIcon = (isSelected) => {
-  const color = isSelected ? '#4CAF50' : '#2196F3'; // green when selected, blue otherwise
-  return L.divIcon({
-    className: 'custom-tree-marker',
-    html: `<div style="
-      width: 30px;
-      height: 30px;
-      background-color: ${color};
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-      border: 2px solid white;
-    "><div style="
-      width: 12px;
-      height: 12px;
-      background-color: white;
-      border-radius: 50%;
-      position: relative;
-      top: 8px;
-      left: 8px;
-    "></div></div>`,
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],      // tip at bottom
-    popupAnchor: [0, -30],     // popup above the icon
-  });
-};
+// Fix for default marker icons (not needed since we use divIcons, but keep for safety)
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 // Component to fit map bounds to markers initially
 function FitBounds({ markers }) {
@@ -58,6 +38,25 @@ function FlyToSelected({ selectedTree }) {
   }, [selectedTree, map]);
   return null;
 }
+
+// Custom icon for markers (blue default, green selected)
+const getMarkerIcon = (isSelected) => {
+  if (isSelected) {
+    return L.divIcon({
+      className: 'selected-tree-marker',
+      html: '<div style="background-color: #4caf50; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3);"></div>',
+      iconSize: [30, 30],
+      popupAnchor: [0, -15],
+    });
+  } else {
+    return L.divIcon({
+      className: 'default-tree-marker',
+      html: '<div style="background-color: #2196f3; width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.2);"></div>',
+      iconSize: [24, 24],
+      popupAnchor: [0, -12],
+    });
+  }
+};
 
 const InteractiveMap = () => {
   const [trees] = useState([
@@ -95,18 +94,21 @@ const InteractiveMap = () => {
     (tree.donor.toLowerCase().includes(searchTerm.toLowerCase()) && !tree.isAnonymous)
   );
 
+  // When a tree is clicked in the sidebar, select it
   const handleSidebarItemClick = (tree) => {
     setSelectedTree(tree);
   };
 
+  // When a marker is clicked, select it
   const handleMarkerClick = (tree) => {
     setSelectedTree(tree);
   };
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
-      {/* Header with only the button */}
-      <div className="bg-white shadow-sm p-4 flex justify-end items-center">
+      {/* Header */}
+      <div className="bg-white shadow-sm p-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-800">TreeOn Global Forest</h1>
         <button
           onClick={() => setShowSidebar(!showSidebar)}
           className="bg-primary-600 text-white px-3 py-2 rounded-lg hover:bg-primary-700 transition"
