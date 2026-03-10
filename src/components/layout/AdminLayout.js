@@ -1,15 +1,18 @@
+// src/components/layout/AdminLayout.js
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 const AdminLayout = () => {
   return (
-    <div>
-      <header>Admin Header</header>
-      <main>
+    <>
+      <Navbar />
+      <main className="flex-grow">
         <Outlet />
       </main>
-      <footer>Admin Footer</footer>
-    </div>
+      <Footer />
+    </>
   );
 };
 

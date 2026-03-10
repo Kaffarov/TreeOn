@@ -43,10 +43,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <FaTree className="text-primary-500 text-3xl" />
-            <span className="font-bold text-2xl text-primary-700">TreeOn</span>
-          </Link>
+         <Link to="/" className="flex items-center space-x-2">
+           <img src="/logo.png" alt="TreeOn" className="h-20 w-auto" />
+         </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">

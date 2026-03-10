@@ -7,12 +7,13 @@ import {
   FaHandsHelping, 
   FaCreditCard,
   FaExclamationTriangle,
-  FaCheckCircle,
   FaHourglassHalf,
+  FaCheckCircle,
   FaArrowRight,
   FaSeedling,
   FaUserCheck,
-  FaMapMarkedAlt
+  FaMapMarkedAlt,
+  FaDollarSign
 } from 'react-icons/fa';
 import { 
   LineChart, 
@@ -33,16 +34,18 @@ import { Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
   // Mock data for stats
-  const stats = [
-    { title: 'Total Trees', value: 58420, icon: FaTree, color: 'bg-green-500', change: '+12.3%' },
-    { title: 'Active Donors', value: 5234, icon: FaUsers, color: 'bg-blue-500', change: '+8.1%' },
-    { title: 'Partner Farmers', value: 287, icon: FaHandsHelping, color: 'bg-amber-500', change: '+5.4%' },
-    { title: 'Active Subscriptions', value: 1890, icon: FaCreditCard, color: 'bg-purple-500', change: '+15.2%' },
-  ];
+  const [stats, setStats] = useState({
+    totalTrees: 58420,
+    activeDonors: 5234,
+    partnerFarmers: 287,
+    activeSubscriptions: 1890,
+    totalRevenue: 285000,
+    pendingReports: 12,
+  });
 
   // Pending actions
   const pendingActions = [
-    { id: 1, type: 'Death Report', count: 12, icon: FaExclamationTriangle, color: 'text-red-500', link: '/admin/reports' },
+    { id: 1, type: 'Death Reports', count: 12, icon: FaExclamationTriangle, color: 'text-red-500', link: '/admin/reports' },
     { id: 2, type: 'Replacements', count: 8, icon: FaHourglassHalf, color: 'text-amber-500', link: '/admin/reports' },
     { id: 3, type: 'New Farmers', count: 5, icon: FaUserCheck, color: 'text-green-500', link: '/admin/farmers' },
     { id: 4, type: 'Pending Geotags', count: 23, icon: FaMapMarkedAlt, color: 'text-blue-500', link: '/admin/trees' },
@@ -80,6 +83,14 @@ const AdminDashboard = () => {
     { id: 'T12349', species: 'Pine', location: 'Ethiopia', date: '2026-03-02', planter: 'Tsegaye A.' },
   ];
 
+  // Recent donations (mock)
+  const recentDonations = [
+    { id: 'DON-001', donor: 'John Smith', amount: 100, date: '2026-03-04' },
+    { id: 'DON-002', donor: 'Emma Wilson', amount: 250, date: '2026-03-04' },
+    { id: 'DON-003', donor: 'Michael Brown', amount: 50, date: '2026-03-03' },
+    { id: 'DON-004', donor: 'Sophia Garcia', amount: 500, date: '2026-03-03' },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-8">
@@ -96,31 +107,105 @@ const AdminDashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-lg p-6 flex items-center"
-            >
-              <div className={`${stat.color} w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4`}>
-                <stat.icon />
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-800">{stat.value.toLocaleString()}</p>
-                <p className="text-xs text-green-600">{stat.change} vs last month</p>
-              </div>
-            </motion.div>
-          ))}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white rounded-xl shadow-lg p-6 flex items-center"
+          >
+            <div className="bg-green-500 w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4">
+              <FaTree />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Total Trees</p>
+              <p className="text-2xl font-bold text-gray-800">{stats.totalTrees.toLocaleString()}</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-xl shadow-lg p-6 flex items-center"
+          >
+            <div className="bg-blue-500 w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4">
+              <FaUsers />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Active Donors</p>
+              <p className="text-2xl font-bold text-gray-800">{stats.activeDonors.toLocaleString()}</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-xl shadow-lg p-6 flex items-center"
+          >
+            <div className="bg-amber-500 w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4">
+              <FaHandsHelping />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Partner Farmers</p>
+              <p className="text-2xl font-bold text-gray-800">{stats.partnerFarmers}</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white rounded-xl shadow-lg p-6 flex items-center"
+          >
+            <div className="bg-purple-500 w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4">
+              <FaCreditCard />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Active Subscriptions</p>
+              <p className="text-2xl font-bold text-gray-800">{stats.activeSubscriptions}</p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Second row stats (revenue, pending) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-white rounded-xl shadow-lg p-6 flex items-center"
+          >
+            <div className="bg-green-600 w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4">
+              <FaDollarSign />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Total Revenue</p>
+              <p className="text-2xl font-bold text-gray-800">€{stats.totalRevenue.toLocaleString()}</p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="bg-white rounded-xl shadow-lg p-6 flex items-center"
+          >
+            <div className="bg-red-500 w-14 h-14 rounded-lg flex items-center justify-center text-white text-2xl mr-4">
+              <FaExclamationTriangle />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm">Pending Reports</p>
+              <p className="text-2xl font-bold text-gray-800">{stats.pendingReports}</p>
+            </div>
+          </motion.div>
         </div>
 
         {/* Pending Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ delay: 0.2 }}
           className="bg-white rounded-xl shadow-lg p-6 mb-8"
         >
           <h2 className="text-xl font-bold text-gray-800 mb-4">Pending Actions</h2>
@@ -145,7 +230,7 @@ const AdminDashboard = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ delay: 0.3 }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-800 mb-4">Trees Planted (Monthly)</h2>
@@ -165,7 +250,7 @@ const AdminDashboard = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ delay: 0.3 }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-800 mb-4">Subscription Plans</h2>
@@ -177,7 +262,6 @@ const AdminDashboard = () => {
                   cy="50%"
                   innerRadius={60}
                   outerRadius={100}
-                  fill="#8884d8"
                   paddingAngle={5}
                   dataKey="value"
                   label
@@ -192,14 +276,14 @@ const AdminDashboard = () => {
           </motion.div>
         </div>
 
-        {/* Recent Trees & Quick Actions */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        {/* Recent Trees & Recent Donations */}
+        <div className="grid lg:grid-cols-2 gap-6">
           {/* Recent Trees Table */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="lg:col-span-2 bg-white rounded-xl shadow-lg p-6"
+            transition={{ delay: 0.4 }}
+            className="bg-white rounded-xl shadow-lg p-6"
           >
             <h2 className="text-xl font-bold text-gray-800 mb-4">Recently Planted Trees</h2>
             <div className="overflow-x-auto">
@@ -233,54 +317,61 @@ const AdminDashboard = () => {
             </div>
           </motion.div>
 
-          {/* Quick Actions */}
+          {/* Recent Donations */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ delay: 0.5 }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-            <div className="space-y-3">
-              <Link to="/admin/users" className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">Manage Users</span>
-                  <FaArrowRight className="text-gray-400" />
-                </div>
-              </Link>
-              <Link to="/admin/trees" className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">Manage Trees</span>
-                  <FaArrowRight className="text-gray-400" />
-                </div>
-              </Link>
-              <Link to="/admin/farmers" className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">Manage Farmers</span>
-                  <FaArrowRight className="text-gray-400" />
-                </div>
-              </Link>
-              <Link to="/admin/reports" className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">Verify Reports</span>
-                  <FaArrowRight className="text-gray-400" />
-                </div>
-              </Link>
-              <Link to="/admin/training" className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">Schedule Training</span>
-                  <FaArrowRight className="text-gray-400" />
-                </div>
-              </Link>
-              <Link to="/admin/reports/generate" className="block bg-gray-50 hover:bg-gray-100 rounded-lg p-3 transition">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-gray-700">Generate Report</span>
-                  <FaArrowRight className="text-gray-400" />
-                </div>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Donations</h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-2 text-gray-600 text-sm">ID</th>
+                    <th className="text-left py-2 text-gray-600 text-sm">Donor</th>
+                    <th className="text-left py-2 text-gray-600 text-sm">Amount</th>
+                    <th className="text-left py-2 text-gray-600 text-sm">Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentDonations.map((donation) => (
+                    <tr key={donation.id} className="border-b last:border-0 hover:bg-gray-50">
+                      <td className="py-3 text-sm font-mono">{donation.id}</td>
+                      <td className="py-3 text-sm">{donation.donor}</td>
+                      <td className="py-3 text-sm font-semibold">€{donation.amount}</td>
+                      <td className="py-3 text-sm">{donation.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4 text-right">
+              <Link to="/admin/donations" className="text-primary-600 hover:text-primary-700 text-sm font-medium inline-flex items-center">
+                View all donations <FaArrowRight className="ml-1" />
               </Link>
             </div>
           </motion.div>
         </div>
+
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-8 bg-white rounded-xl shadow-lg p-6"
+        >
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/admin/users" className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-800 text-sm font-medium">Manage Users</Link>
+            <Link to="/admin/trees" className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-800 text-sm font-medium">Manage Trees</Link>
+            <Link to="/admin/farmers" className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-800 text-sm font-medium">Manage Farmers</Link>
+            <Link to="/admin/reports" className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-800 text-sm font-medium">Verify Reports</Link>
+            <Link to="/admin/training" className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-800 text-sm font-medium">Schedule Training</Link>
+            <Link to="/admin/reports/generate" className="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-gray-800 text-sm font-medium">Generate Report</Link>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

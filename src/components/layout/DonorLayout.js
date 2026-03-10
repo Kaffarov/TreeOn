@@ -1,15 +1,18 @@
+// src/components/layout/DonorLayout.js
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 const DonorLayout = () => {
   return (
-    <div>
-      <header>Donor Dashboard Header</header>
-      <main>
+    <>
+      <Navbar />
+      <main className="flex-grow">
         <Outlet />
       </main>
-      <footer>Donor Footer</footer>
-    </div>
+      <Footer />
+    </>
   );
 };
 

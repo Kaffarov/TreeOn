@@ -50,10 +50,10 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: FaFacebook, href: 'https://facebook.com/treeon', color: 'hover:text-blue-600' },
-    { icon: FaTwitter, href: 'https://twitter.com/treeon', color: 'hover:text-blue-400' },
-    { icon: FaInstagram, href: 'https://instagram.com/treeon', color: 'hover:text-pink-600' },
-    { icon: FaLinkedin, href: 'https://linkedin.com/company/treeon', color: 'hover:text-blue-700' },
-    { icon: FaYoutube, href: 'https://youtube.com/treeon', color: 'hover:text-red-600' },
+    { icon: FaTwitter, href: 'https://x.com/tree_0n', color: 'hover:text-blue-400' },
+    { icon: FaInstagram, href: 'https://instagram.com/tree.0n', color: 'hover:text-pink-600' },
+    { icon: FaLinkedin, href: 'https://linkedin.com/in/treeon', color: 'hover:text-blue-700' },
+    { icon: FaYoutube, href: 'https://youtube.com/@treeon-f', color: 'hover:text-red-600' },
   ];
 
   return (
@@ -64,8 +64,10 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <FaTree className="text-primary-400 text-3xl" />
-              <span className="font-bold text-2xl">TreeOn</span>
+               {/* Logo */}
+              <Link to="/" className="flex items-center space-x-2">
+                <img src="/logo.png" alt="TreeOn" className="h-20 w-auto" />
+              </Link>
             </div>
             <p className="text-gray-400 mb-4">
               Making the world greener, one tree at a time. Join us in our mission to combat climate change through reforestation.
@@ -116,13 +118,13 @@ const Footer = () => {
             </div>
             <div className="flex items-center space-x-3 text-gray-400">
               <FaPhone className="text-primary-400" />
-              <a href="tel:+1234567890" className="hover:text-primary-400">
-                +1 (234) 567-890
+              <a href="tel:+2348028280993" className="hover:text-primary-400">
+                +234 8028-280-993
               </a>
             </div>
             <div className="flex items-center space-x-3 text-gray-400">
               <FaMapMarkerAlt className="text-primary-400" />
-              <span>123 Green Street, Eco City, EC 12345</span>
+              <span>No: 149 FARIN GADA, JOS</span>
             </div>
           </div>
         </div>
@@ -152,7 +154,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 pt-8 text-center text-gray-500">
-          <p>&copy; {currentYear} TreeOn. All rights reserved. | Registered NGO | Tax ID: 123456789</p>
+          <p>&copy; {currentYear} TreeOn. All rights reserved. | Registered NGO | RC - 9386253</p>
           <p className="text-sm mt-2">
             Made with ❤️ for a greener planet
           </p>
