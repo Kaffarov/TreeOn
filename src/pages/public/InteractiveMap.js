@@ -105,7 +105,7 @@ const InteractiveMap = () => {
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
-      {/* Header with only the button */}
+      {/* Header with toggle button */}
       <div className="bg-white shadow-sm p-4 flex justify-end items-center">
         <button
           onClick={() => setShowSidebar(!showSidebar)}
@@ -149,7 +149,7 @@ const InteractiveMap = () => {
           <FlyToSelected selectedTree={selectedTree} />
         </MapContainer>
 
-        {/* Floating Sidebar */}
+        {/* Floating Sidebar - positioned below header */}
         <AnimatePresence>
           {showSidebar && (
             <motion.div
@@ -157,7 +157,7 @@ const InteractiveMap = () => {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 300, opacity: 0 }}
               transition={{ type: 'spring', damping: 20 }}
-              className="absolute top-0 right-0 h-full w-80 bg-white/95 backdrop-blur-sm shadow-lg overflow-hidden flex flex-col z-10"
+              className="absolute top-20 right-0 h-[calc(100vh-5rem)] w-80 bg-white/95 backdrop-blur-sm shadow-lg overflow-hidden flex flex-col z-10"
             >
               <div className="p-4 border-b flex justify-between items-center">
                 <h2 className="text-lg font-bold text-gray-800">Explore Trees</h2>

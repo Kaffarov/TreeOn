@@ -124,7 +124,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center space-x-3 text-gray-400">
               <FaMapMarkerAlt className="text-primary-400" />
-              <span>No: 149 FARIN GADA, JOS</span>
+              <span>149 Farin Gada, Jos, Plateau State, Nigeria</span>
             </div>
           </div>
         </div>
@@ -154,9 +154,9 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="border-t border-gray-800 pt-8 text-center text-gray-500">
-          <p>&copy; {currentYear} TreeOn. All rights reserved. | Registered NGO | RC - 9386253</p>
+          <p>&copy; {currentYear} TreeOn. All rights reserved. | RC - 9386253</p>
           <p className="text-sm mt-2">
-            Made with ❤️ for a greener planet
+            Tax ID: 2623135754320
           </p>
         </div>
       </div>
