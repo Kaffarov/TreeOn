@@ -156,7 +156,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-8 text-center text-gray-500">
           <p>&copy; {currentYear} TreeOn. All rights reserved. | Registered NGO | RC - 9386253</p>
           <p className="text-sm mt-2">
-            Made with ❤️ for a greener planet
+            Made by Yousef
           </p>
         </div>
       </div>
